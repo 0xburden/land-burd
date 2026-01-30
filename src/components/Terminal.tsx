@@ -93,6 +93,9 @@ export default function Terminal({ onClose, onMinimize }: TerminalProps) {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      if (input.trim().toLowerCase() === "exit") {
+        onClose()
+      }
       setInput("")
     }
   }
