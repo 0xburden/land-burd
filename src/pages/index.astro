@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.astro"
+import MenuBar from "../components/MenuBar.astro"
+import DesktopIcon from "../components/DesktopIcon.astro"
+
+const desktopIcons = [
+  { icon: "hard_drive", label: "Macintosh HD" },
+  { icon: "folder", label: "Documents" },
+  { icon: "photo_library", label: "Photos" },
+  { icon: "terminal", label: "Terminal" },
+  { icon: "settings", label: "Settings" },
+  { icon: "delete", label: "Trash" },
+]
+---
+
+<Layout title="Desktop">
+  <div class="flex h-full w-full flex-col bg-purple-600">
+    <MenuBar />
+    <main class="flex-1 p-4">
+      <div class="flex flex-col flex-wrap content-end gap-2" style="height: calc(100vh - 1.75rem - 2rem);">
+        {desktopIcons.map((item) => <DesktopIcon icon={item.icon} label={item.label} />)}
+      </div>
+    </main>
+  </div>
+</Layout>
