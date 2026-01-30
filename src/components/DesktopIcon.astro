@@ -2,12 +2,19 @@
 interface Props {
   icon: string
   label: string
+  href?: string
 }
 
-const { icon, label } = Astro.props
+const { icon, label, href } = Astro.props
+const Tag = href ? "a" : "div"
 ---
 
-<div class="flex w-20 cursor-pointer flex-col items-center gap-1 rounded-lg p-2 hover:bg-white/20">
-  <span class="material-symbols-outlined text-5xl text-white drop-shadow-lg">{icon}</span>
-  <span class="text-center text-xs font-medium text-white drop-shadow-md">{label}</span>
-</div>
+<Tag
+  href={href}
+  target={href ? "_blank" : undefined}
+  rel={href ? "noopener noreferrer" : undefined}
+  class="flex w-24 cursor-pointer flex-col items-center gap-1 rounded-lg p-2 hover:bg-white/20 md:w-20"
+>
+  <span class="material-symbols-outlined text-6xl text-white drop-shadow-lg md:text-5xl">{icon}</span>
+  <span class="text-center text-sm font-medium text-white drop-shadow-md md:text-xs">{label}</span>
+</Tag>
