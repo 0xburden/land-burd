@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Terminal from "./Terminal"
+import ResumeModal from "./ResumeModal"
 import MenuBar from "./MenuBar"
 
 interface DesktopIcon {
@@ -11,11 +12,14 @@ interface DesktopIcon {
 interface DesktopProps {
   icons: DesktopIcon[]
   backgroundImage: string
+  resumeContent?: string
 }
 
-export default function Desktop({ icons, backgroundImage }: DesktopProps) {
+export default function Desktop({ icons, backgroundImage, resumeContent = "" }: DesktopProps) {
   const [terminalOpen, setTerminalOpen] = useState(false)
   const [terminalMinimized, setTerminalMinimized] = useState(false)
+  const [resumeOpen, setResumeOpen] = useState(false)
+  const [resumeMinimized, setResumeMinimized] = useState(false)
 
   const handleIconClick = (icon: DesktopIcon) => {
     if (icon.label === "Terminal") {
@@ -24,26 +28,45 @@ export default function Desktop({ icons, backgroundImage }: DesktopProps) {
       } else {
         setTerminalOpen(true)
       }
+    } else if (icon.label === "Resume.md") {
+      if (resumeMinimized) {
+        setResumeMinimized(false)
+      } else {
+        setResumeOpen(true)
+      }
     }
   }
 
-  const handleMinimize = () => {
+  const handleTerminalMinimize = () => {
     setTerminalMinimized(true)
   }
 
-  const handleClose = () => {
+  const handleTerminalClose = () => {
     setTerminalOpen(false)
     setTerminalMinimized(false)
   }
 
-  const activeApp = terminalOpen && !terminalMinimized ? "Terminal" : "Finder"
+  const handleResumeMinimize = () => {
+    setResumeMinimized(true)
+  }
+
+  const handleResumeClose = () => {
+    setResumeOpen(false)
+    setResumeMinimized(false)
+  }
+
+  const getActiveApp = () => {
+    if (terminalOpen && !terminalMinimized) return "Terminal"
+    if (resumeOpen && !resumeMinimized) return "Resume.md"
+    return "Finder"
+  }
 
   return (
     <div
       className="flex h-full w-full flex-col bg-cover bg-left bg-no-repeat"
       style={{ backgroundImage: `url('${backgroundImage}')` }}
     >
-      <MenuBar activeApp={activeApp} />
+      <MenuBar activeApp={getActiveApp()} />
       <main className="flex-1 p-4">
         <div
           className="flex flex-col flex-wrap content-end gap-2"
@@ -84,7 +107,15 @@ export default function Desktop({ icons, backgroundImage }: DesktopProps) {
         </div>
 
         {terminalOpen && !terminalMinimized && (
-          <Terminal onClose={handleClose} onMinimize={handleMinimize} />
+          <Terminal onClose={handleTerminalClose} onMinimize={handleTerminalMinimize} />
+        )}
+
+        {resumeOpen && !resumeMinimized && (
+          <ResumeModal
+            onClose={handleResumeClose}
+            onMinimize={handleResumeMinimize}
+            content={resumeContent}
+          />
         )}
       </main>
     </div>

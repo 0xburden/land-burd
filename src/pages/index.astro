@@ -1,16 +1,25 @@
 ---
 import Layout from "../layouts/Layout.astro"
 import Desktop from "../components/Desktop"
+import { readFileSync } from "fs"
+import { join } from "path"
 
 const desktopIcons = [
   { icon: "web", label: "GitHub", href: "https://github.com/0xburden" },
   { icon: "web", label: "X", href: "https://x.com/0xburden" },
   { icon: "web", label: "Waifus", href: "https://waifusanonymous.com" },
   { icon: "mail", label: "Email", href: "mailto:0xburden@protonmail.com" },
+  { icon: "description", label: "Resume.md" },
   { icon: "terminal", label: "Terminal" },
+  { icon: "description", label: "son-of-burden-vim", href: "https://github.com/0xburden/son-of-burden-vim" },
+  { icon: "description", label: "pi.nvim", href: "https://github.com/0xburden/pi.nvim" },
 ]
+
+// Read resume content at build time
+const resumePath = join(process.cwd(), "public", "resume.md")
+const resumeContent = readFileSync(resumePath, "utf-8")
 ---
 
 <Layout title="0xburden's Desktop">
-  <Desktop icons={desktopIcons} backgroundImage="/texas-lounge-smoke.png" client:load />
+  <Desktop icons={desktopIcons} backgroundImage="/texas-lounge-smoke.png" resumeContent={resumeContent} client:load />
 </Layout>
